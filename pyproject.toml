@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "python-poetry-boilerplate"
+name = "python-otel-experiment"
 version = "0.1.0"
-description = "Python Poetry Boilerplate"
+description = "Python OTEL Experiment"
 authors = ["face0b1101 <6190957+face0b1101@users.noreply.github.com>"]
 maintainers = ["face0b1101 <6190957+face0b1101@users.noreply.github.com>"]
 readme = "README.md"
-homepage = "https://github.com/face0b1101/python-poetry-boilerplate"
-repository = "https://github.com/face0b1101/python-poetry-boilerplate"
-documentation = "https://github.com/face0b1101/python-poetry-boilerplate"
+homepage = "https://github.com/face0b1101/python-otel-experiment"
+repository = "https://github.com/face0b1101/python-otel-experiment"
+documentation = "https://github.com/face0b1101/python-otel-experiment"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -36,4 +36,4 @@ line-length = 88
 profile = "black" 
 
 [tool.poetry.scripts]
-python-poetry-boilerplate = 'python_poetry_boilerplate.main:main'
+python-otel-experiment = 'python_otel_experiement.main:main'

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 
-from python_poetry_boilerplate import __version__
-from python_poetry_boilerplate.main import something
+from python_otel_experiment import __version__
+from python_otel_experiment.main import something
 
 
 def test_version():
