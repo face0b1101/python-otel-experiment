@@ -36,4 +36,4 @@ line-length = 88
 profile = "black" 
 
 [tool.poetry.scripts]
-python-otel-experiment = 'python_otel_experiement.main:main'
+python-otel-experiment = 'python_otel_experiment.main:main'
