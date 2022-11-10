@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "python-poetry-boilerplate"
+version = "0.1.0"
+description = "Python Poetry Boilerplate"
+authors = ["face0b1101 <6190957+face0b1101@users.noreply.github.com>"]
+maintainers = ["face0b1101 <6190957+face0b1101@users.noreply.github.com>"]
+readme = "README.md"
+homepage = "https://github.com/face0b1101/python-poetry-boilerplate"
+repository = "https://github.com/face0b1101/python-poetry-boilerplate"
+documentation = "https://github.com/face0b1101/python-poetry-boilerplate"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-decouple = "^3.6"
+Unipath = "^1.1"
+rich = "^12.5.1"
+
+[tool.poetry.dev-dependencies]
+ipython = "^8.0.0"
+jupyter = "^1.0.0"
+pytest = "^6.2.5"
+tox = "^3.25.1"
+flake8 = "^4.0.1"
+isort = "^5.10.1"
+black = {version = "^22.6.0", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+# make it compatible with black
+profile = "black" 
+
+[tool.poetry.scripts]
+python-poetry-boilerplate = 'python_poetry_boilerplate.main:main'
