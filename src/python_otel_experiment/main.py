@@ -51,20 +51,24 @@ resource = Resource(
 resource = Resource(attributes={SERVICE_NAME: "Python OTEL Experiment"})
 
 # OTLP Tracer configuration
+# Use Environment Variables by default, uncomment to explicitly set values
 provider = TracerProvider(resource=resource)
 processor = BatchSpanProcessor(
-    OTLPSpanExporter(
-        endpoint=OTEL_EXPORTER_OTLP_ENDPOINT, headers=OTEL_EXPORTER_OTLP_HEADERS
-    )
+    OTLPSpanExporter()
+    # OTLPSpanExporter(
+    #     endpoint=OTEL_EXPORTER_OTLP_ENDPOINT, headers=OTEL_EXPORTER_OTLP_HEADERS
+    # )
 )
 provider.add_span_processor(processor)
 trace.set_tracer_provider(provider)
 
 # OTLP Metrics configuration
+# Use Environment Variables by default, uncomment to explicitly set values
 reader = PeriodicExportingMetricReader(
-    OTLPMetricExporter(
-        endpoint=OTEL_EXPORTER_OTLP_ENDPOINT, headers=OTEL_EXPORTER_OTLP_HEADERS
-    )
+    OTLPMetricExporter()
+    # OTLPMetricExporter(
+    #     endpoint=OTEL_EXPORTER_OTLP_ENDPOINT, headers=OTEL_EXPORTER_OTLP_HEADERS
+    # )
 )
 provider = MeterProvider(resource=resource, metric_readers=[reader])
 metrics.set_meter_provider(provider)
