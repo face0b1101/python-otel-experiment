@@ -7,48 +7,37 @@
 # https://opentelemetry.io/docs/instrumentation/python/exporters/#otlp-endpoint-or-collector
 
 import logging
-import urllib.parse
+from random import randint
+
+from flask import Flask
 
 # These are the necessary import declarations
-from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-
-from opentelemetry import metrics
+from opentelemetry import metrics, trace
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-
-from random import randint
-from flask import Flask, request
-
-from rich import print
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from rich.logging import RichHandler
 
 from .config.env import (
     DEFAULT_TZ,
     LOG_LEVEL,
-    APM_AGENT_KEY,
-    OTEL_RESOURCE_ATTRIBUTES,
     OTEL_EXPORTER_OTLP_ENDPOINT,
     OTEL_EXPORTER_OTLP_HEADERS,
-    OTEL_METRICS_EXPORTER,
-    OTEL_LOGS_EXPORTER,
 )
 
 # Service name is required for most backends
-resource = Resource(
-    attributes={
-        "service.name": "Python OTEL Experiment",
-        "service.version": 0.1,
-        "deployment.environment": "dev",
-    }
-)
-
 resource = Resource(attributes={SERVICE_NAME: "Python OTEL Experiment"})
+# resource = Resource(
+#     attributes={
+#         "service.name": "Python OTEL Experiment",
+#         "service.version": 0.1,
+#         "deployment.environment": "dev",
+#     }
+# )
 
 # OTLP Tracer configuration
 # Use Environment Variables by default, uncomment to explicitly set values
@@ -123,4 +112,4 @@ def main():
     logging.debug(f"ENDPOINT: {OTEL_EXPORTER_OTLP_ENDPOINT}")
     logging.debug(f"HEADER: {OTEL_EXPORTER_OTLP_HEADERS}")
 
-    app.run()
+    app.run(host="0.0.0.0")

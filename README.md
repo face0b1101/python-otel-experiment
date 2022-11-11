@@ -1,134 +1,56 @@
-# python-boilerplate #
+# Python OTEL (Docker) Experiment #
 
-Python Poetry Boilerplate Project Structure
+Quick and dirty, horribly-coded, `insert excuse for bad coding here`, project to demonstrate Python utilizing OpenTelemetry instrumentation, within a Docker container.
 
-## Folder Structure ##
+This is *not* production-ready, nowhere near :), and is purely to demonstrate that sending OTEL instrumentation from within a Docker container is straightforward.
 
-```sh
-python-poetry-boilerplate
-├── .github
-│   └── workflows                 # Workflows
-│       ├── development.yaml      # Production workflow
-│       └── production.yaml       # Development workflow
-├── conftest.py                   # pytest configuration file
-├── notebooks
-│   └── test.ipynb                # Test Jupyter notebook (for development)
-├── src
-│   └── python_poetry_boilerplate
-│       ├── config
-│       │   ├── __init__.py 
-│       │   └── env.py            # Environment variables module
-│       ├── libs
-│       │   ├── __init__.py 
-│       │   └── my_libs.py        # Utility libraries
-│       ├── main.job.py           # Main job script
-│       └── main.service.py       # Main service script
-├── tests
-│   ├── __init__.py
-│   ├── test_job.py               # Test job script
-│   └── test_my_libs.py           # Test libraries
-├── .dockerignore                 # Docker ignore file
-├── .env.example                  # Environment variables example
-├── .gitignore                    # Git ignore file
-├── conftest.py                   # Test configuration file
-├── Dockerfile.kubernetes         # Dockerfile for kubernetes
-├── Dockerfile.lambda             # Dockerfile for lambda
-├── Makefile                      # Makefile
-├── poetry.lock                   # Poetry lock file
-├── pyproject.toml                # Pyproject.toml
-└── README.md                     # Readme
+- [Python OTEL (Docker) Experiment](#python-otel-docker-experiment)
+  - [Python](#python)
+    - [Poetry](#poetry)
+  - [Docker](#docker)
+    - [Build Docker Container Image](#build-docker-container-image)
+    - [Run using Docker-Compose](#run-using-docker-compose)
+
+## Python ##
+
+The sample application is pretty much directly copied from [opentelemetry.io's](https://opentelemetry.io/) *[Getting Started](https://opentelemetry.io/docs/instrumentation/python/getting-started)* and *[Exporters](https://opentelemetry.io/docs/instrumentation/python/exporters)* examples using a Flask app. The app fires up a single web page returning a 'random' dice roll (from a D6).
+
+A combination of Auto and Manual instrumentation then sends stuff to an OTLP endpoint, in my case I used an Elasticsearch APM endpoint running in [Elastic Cloud](https://cloud.elastic.co). This is configured using Environment variables. An example .env file is included in the repo.
+
+### Poetry ###
+
+The project uses [Poetry](https://python-poetry.org/) for package management etc. The instructions below expect you to use Poetry to build the app.
+
+## Docker ##
+
+### Build Docker Container Image ###
+
+You won't be able to push to my GHCR registry, so just build and retag to something more suitable.
+
+```bash
+poetry build; poetry run poetry-lock-package --build
+docker build -f dockerfile -t ghcr.io/face0b1101/python-otel-experiment:{VERSION} .
+docker tag ghcr.io/face0b1101/python-otel-experiment:{VERSION} ghcr.io/face0b1101/python-otel-experiment:latest
+docker push
 ```
 
-## How to Create a new Project ##
+### Run using [Docker-Compose](https://docs.docker.com/compose/) ###
 
-There are two ways to create a new Project.
+Use the following `docker-compose.yml` example to run the app. Make sure you have a properly configured `.env` file, use `.env.example` for inspiration.
 
-### 1. Create a new Project from the repo as a template ### 
+```yaml
+---
+version: "3.8"
 
-Pretty straightforward. Go to the [repository](https://github.com/face0b1101/python-poetry-boilerplate) and click the green `Use this template` button.
+services:
+  python-otel-experiment:
+    image: ghcr.io/face0b1101/python-otel-experiment:latest
+    container_name: python-otel-experiment
+    working_dir: $PWD
+    volumes:
+      - "$PWD:$PWD"
+    tty: true
+    env_file:
+      - .env
 
-See [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) for more details.
-
-### 2. Create a Fork ###
-
-Alternatively, create a fork the _old-fashioned_ way:
-
-- Create new repository on GitHub (`new-repository-name`)
-- Create another folder on local machine
-- Bare clone this repository
-
-    ```bash
-    git clone --bare https://github.com/face0b1101/python-poetry-boilerplate
-    ```
-
-- CD to this folder (with .git suffix) and push mirror to GitHub
-
-    ```bash
-    cd python-boilerplate.git
-    git push --mirror https://github.com/face0b1101/new-repository-name.git
-    ```
-
-- Remove `python-poetry-boilerplate.git` folder from local folder
-- Clone `new-repository-name` to local folder
-
-### Housekeeping ###
-
-When you have your new project set up, a bit of housekeeping is required:
-
-1. Rename `src/python_poetry_boilerplate` to `src/new_repository_name`
-2. Update `pyproject.toml`
-    - replace `python-poetry-boilerplate` with `new-repository-name`
-    - replace `python_poetry_boilerplate` with `new_repository_name`
-    - update other items in `[tool.poetry]` as appropriate
-3. Update pytest scripts
-    - update imports in `tests/test_my_app.py`
-4. Install Poetry
-
-    ```bash
-    poetry install
-    ```
-
-5. Run pytest
-
-    ```bash
-    poetry run pytest
-    ```
-
-    If the tests run without error then you have configured your project and you're ready to get coding.
-
-## How to Code ##
-
-1. Create a new branch
-
-   ```bash
-   git branch <new-branch>
-   ```
-  
-2. Install Poetry
-
-   ```bash
-   # probably not necessary, but it does no harm
-   poetry install
-   poetry shell
-   ```
-
-3. Do some coding and stuff...
-
-4. Push the new branch and changes
-  
-   ```bash
-   git push -u origin <new-branch>
-   ```
-
-## How to Commit ##
-
-- Commit on the branch
-- PR if it should be merged
-- Specify the type of commit:
-  - feat: The new feature you're adding to a particular application
-  - fix: A bug fix
-  - style: Feature and updates related to styling
-  - refactor: Refactoring a specific section of the codebase
-  - test: Everything related to testing
-  - docs: Everything related to documentation
-  - chore: Regular code maintenance.[ You can also use emojis to represent commit types]
+```

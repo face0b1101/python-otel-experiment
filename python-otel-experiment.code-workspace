@@ -22,7 +22,7 @@
 		"editor.formatOnSave": true,
 		"python.pythonPath": "./.venv/bin/python3",
 		"python.formatting.provider": "black",
-		"python.sortImports.args": [
+		"python.isort.args": [
 			"--profile", "black"
 		],
 		"[python]": {
