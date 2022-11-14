@@ -46,11 +46,9 @@ services:
   python-otel-experiment:
     image: ghcr.io/face0b1101/python-otel-experiment:latest
     container_name: python-otel-experiment
-    working_dir: $PWD
-    volumes:
-      - "$PWD:$PWD"
+    ports:
+      - "8080:5000"
     tty: true
     env_file:
       - .env
-
 ```
