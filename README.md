@@ -2,7 +2,7 @@
 
 Quick and dirty, horribly-coded, `insert excuse for bad coding here`, project to demonstrate Python utilizing OpenTelemetry instrumentation, within a Docker container.
 
-This is *not* production-ready, nowhere near :), and is purely to demonstrate that sending OTEL instrumentation from within a Docker container is straightforward.
+This is *not* production-ready, nowhere near :), and is purely to experiment with sending OTEL instrumentation from within a Docker container.
 
 - [Python OTEL (Docker) Experiment](#python-otel-docker-experiment)
   - [Python](#python)
